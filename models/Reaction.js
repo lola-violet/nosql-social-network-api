@@ -1,16 +1,23 @@
 const { Schema, model, Types} = require('mongoose');
+const Thought = require('./Thought');
 const User = require('./User');
-const reactionSchema = require('./Reaction');
 const moment = require('moment');
 
-// Schema to create Thought Model
-const thoughtSchema = new Schema(
+// Reaction Schema
+const reactionSchema = new Schema(
     {
-        thoughtText: {
+        reactionId: {
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId(),
+        },
+        reactionBody: {
+            type: String, 
+            required: true,
+            maxlength: 280,
+        },
+        username: {
             type: String,
             required: true,
-            minLength: 1,
-            maxLength: 280,
         },
         createdAt: {
             type: Date,
@@ -19,23 +26,14 @@ const thoughtSchema = new Schema(
             // Get method to format timestamp on query
             get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a'),
         },
-        username: {
-            type: String,
-            required: true,
-        },
-        reactions: [reactionSchema],
     },
     {
         toJSON: {
             getters: true,
-            virtuals: true,
         },
+        id: false,
     },
 );
 
-
-
-// Initialize Thought Model
-const Thought = model('thought', thoughtSchema);
-// Export Thought Model
-module.exports = Thought;
+// Export Reaction Schema
+module.exports = reactionSchema;
