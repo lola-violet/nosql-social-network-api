@@ -9,7 +9,7 @@ module.exports = {
     },
     // Get one Thought by ID
     getSingleThought(req, res) {
-        Thought.findOne({ _id: req.params._id })
+        Thought.findOne({ _id: req.params.thoughtId })
         .select('-__v')
         .then((foundThought) => {
             !foundThought
@@ -42,6 +42,22 @@ module.exports = {
         })
     },
     // Update existing Thought by ID
+    updateThought(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $set: req.body },
+            { new: true },
+        )
+        .then((updThought) => {
+            !updThought
+                ? res.status(404).json({ msg: "No thought with that ID" })
+                : res.json(updThought)
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    },
     // Delete existing Thought by ID
     // Create new Reaction
     addReaction(req, res) {
@@ -61,5 +77,20 @@ module.exports = {
         });        
     },
     // Delete existing Reaction by ID
-
+    removeReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: { reactionId: req.params.reactionId } } },
+            { new: true },
+        )
+        .then((foundReaction) => {
+            !foundReaction
+                ? res.status(404).json({ msg: "No thought with that ID" })
+                : res.json(foundReaction)
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });        
+    },
 }
