@@ -45,9 +45,9 @@ const userSchema = new Schema(
 );
 
 // Virtual to retrieve length of user's friends array on query
-userSchema.virtual('friendCount').get(() => {
-    return this.friends.length;
-});
+// userSchema.virtual('friendCount').get(() => {
+//     return this.friends.length;
+// });
 
 // Initialize User Model
 const User = model('user', userSchema);
