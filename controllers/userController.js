@@ -1,9 +1,14 @@
+const mongoose = require('mongoose');
 const { User, Thought } = require('../models');
 
 module.exports = {
     // Get all Users
     getUsers(req, res) {
         User.find({})
+        .populate([
+            { path: 'thoughts', select: '-__v' },
+            { path: 'friends', select: '-__v' }
+        ])
         .select('-__v')
         .then((users) => res.json(users))
         .catch((err) => {
@@ -14,6 +19,10 @@ module.exports = {
     // Get one User by ID
     getSingleUser(req, res) {
         User.findOne({ _id: req.params.userId })
+        .populate([
+            { path: 'thoughts', select: '-__v' },
+            { path: 'friends', select: '-__v' }
+        ])
         .select('-__v')
         .then((foundUser) => {
             !foundUser
@@ -52,6 +61,19 @@ module.exports = {
         });        
     },
     // Delete existing User by ID
+    deleteUser(req, res) {
+        User.findOneAndDelete({ _id: req.params.userId })
+        .then((delUser) => {
+            !delUser
+                ? res.status(404).json({ msg: "No user with that ID" })
+                : Thought.deleteMany({ _id: { $in: delUser.thoughts } })
+        })
+        .then(() => res.json({ message: "User & associated thoughts successfully deleted." }))
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        }); 
+    },
     // Add friend to User's friend list
     addFriend(req, res) {
         User.findOneAndUpdate(
