@@ -44,6 +44,22 @@ module.exports = {
     // Update existing Thought by ID
     // Delete existing Thought by ID
     // Create new Reaction
+    addReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $addToSet: { reactions: req.body } },
+            { new: true },
+        )
+        .then((foundThought) => {
+            !foundThought
+                ? res.status(404).json({ msg: "No thought with that ID" })
+                : res.json(foundThought)
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });        
+    },
     // Delete existing Reaction by ID
 
 }
