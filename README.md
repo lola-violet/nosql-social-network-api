@@ -11,6 +11,7 @@ This application is a back-end API framework for an online social network. The a
 * [Installation](#installation)
 * [Walkthrough](#walkthrough)
 * [Usage](#usage)
+* [Images](#images)
 * [License](#license)
 * [Contributing](#contributing)
 * [Questions](#questions)
@@ -35,6 +36,14 @@ You can get the information for all thoughts or one thought, which includes an a
 You can add or remove a user from another user's array of friends.
 ### Reactions
 You can post a reaction to a specific thought, as well as delete a reaction.
+
+---
+
+## Images
+![Screenshot1](./assets/snapi1.png)
+![Screenshot2](./assets/snapi2.png)
+![Screenshot3](./assets/snapi3.png)
+![Screenshot4](./assets/snapi4.png)
 
 ---
 
